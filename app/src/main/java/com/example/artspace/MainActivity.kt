@@ -10,7 +10,7 @@ import androidx.compose.material.Button
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -22,6 +22,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.artspace.ui.theme.ArtSpaceTheme
+import com.example.artspace.ui.theme.Purple200
+import com.example.artspace.ui.theme.Purple700
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -42,30 +44,74 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun ScreenLayout() {
+
+    var result by remember { mutableStateOf(1) }
+
+    fun nextPicture() {
+        if (result < 3) result++ else result = 1
+    }
+
+    fun prevPicture() {
+        if (result in 2..3) result-- else result = 3
+    }
+
+    val imageResource: Int = when(result) {
+        1 -> R.drawable.beach
+        2 -> R.drawable.balcony
+        3 -> R.drawable.sisters
+        else -> R.drawable.ic_launcher_foreground
+    }
+
+    val textContent = when(result) {
+        1 -> "The Beach"
+        2 -> "View from our balcony"
+        3 -> "Sisters"
+        else -> "That's all"
+    }
+
     Column(
         modifier = Modifier.padding(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        ArtBox()
+        ArtBox(imageResource)
         Spacer(modifier = Modifier.height(24.dp))
-        ArtistCredentials()
+        ArtistCredentials(textContent)
         Spacer(modifier = Modifier.height(16.dp))
-        NavigationButtons()
+
+        Row() {
+            Button(
+                onClick = { prevPicture() },
+                Modifier.width(120.dp)
+            ) {
+                Text("Previous")
+            }
+            Spacer(modifier = Modifier.width(16.dp))
+            Button(
+                onClick = { nextPicture() },
+                Modifier.width(120.dp)
+            ) {
+                Text("Next")
+            }
+        }
+
+        Text(text = "$result")
     }
 }
 
 @Composable
-fun ArtBox() {
+fun ArtBox(
+    imageResource: Int
+) {
     Column(
         modifier = Modifier
             .padding(8.dp),
     ) {
         Image(
-            painter = painterResource(id = R.drawable.beach),
+            painter = painterResource(id = imageResource),
             contentDescription = "Beach",
             modifier = Modifier
                 .fillMaxWidth()
-                .border(4.dp, Color.Gray)
+                .border(4.dp, Purple200)
                 .padding(8.dp)
                 .height(200.dp),
             contentScale = ContentScale.Crop,
@@ -75,7 +121,9 @@ fun ArtBox() {
 }
 
 @Composable
-fun ArtistCredentials() {
+fun ArtistCredentials(
+    textContent: String
+) {
     Column(
         modifier = Modifier
             .border(2.dp, Color.LightGray)
@@ -83,9 +131,9 @@ fun ArtistCredentials() {
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
-            text = "Painting Name",
+            text = textContent,
             fontStyle = FontStyle.Italic,
-            color = Color.DarkGray,
+            color = Purple700,
             fontSize = 24.sp,
             textAlign = TextAlign.Center
         )
@@ -97,26 +145,6 @@ fun ArtistCredentials() {
             text = "Year created",
             fontSize = 12.sp
         )
-    }
-
-}
-
-@Composable
-fun NavigationButtons() {
-    Row() {
-        Button(
-            onClick = { /*TODO*/ },
-            Modifier.width(120.dp)
-        ) {
-            Text("Previous")
-        }
-        Spacer(modifier = Modifier.width(16.dp))
-        Button(
-            onClick = { /*TODO*/ },
-            Modifier.width(120.dp)
-        ) {
-            Text("Next")
-        }
     }
 
 }
