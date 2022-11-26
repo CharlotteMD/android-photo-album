@@ -62,11 +62,11 @@ fun ScreenLayout() {
         else -> R.drawable.ic_launcher_foreground
     }
 
-    val textContent = when(result) {
-        1 -> "The Beach"
-        2 -> "View from our balcony"
-        3 -> "Sisters"
-        else -> "That's all"
+    val artistCredentials: List<String>  = when(result) {
+        1 -> listOf("The Beach", "Thailand", "2022")
+        2 -> listOf("View from our balcony", "Thailand", "2022")
+        3 -> listOf("Sisters", "Hullavington", "2020")
+        else -> listOf("That's all", "Nothing to see here", "0")
     }
 
     Column(
@@ -75,7 +75,7 @@ fun ScreenLayout() {
     ) {
         ArtBox(imageResource)
         Spacer(modifier = Modifier.height(24.dp))
-        ArtistCredentials(textContent)
+        ArtistCredentials(artistCredentials)
         Spacer(modifier = Modifier.height(16.dp))
 
         Row() {
@@ -93,8 +93,6 @@ fun ScreenLayout() {
                 Text("Next")
             }
         }
-
-        Text(text = "$result")
     }
 }
 
@@ -122,7 +120,7 @@ fun ArtBox(
 
 @Composable
 fun ArtistCredentials(
-    textContent: String
+    artistCredentials: List<String>
 ) {
     Column(
         modifier = Modifier
@@ -131,18 +129,18 @@ fun ArtistCredentials(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
-            text = textContent,
+            text = artistCredentials[0],
             fontStyle = FontStyle.Italic,
             color = Purple700,
             fontSize = 24.sp,
             textAlign = TextAlign.Center
         )
         Text(
-            text = "Artist Credentials",
+            text = artistCredentials[1],
             fontSize = 16.sp
         )
         Text(
-            text = "Year created",
+            text = artistCredentials[2],
             fontSize = 12.sp
         )
     }
